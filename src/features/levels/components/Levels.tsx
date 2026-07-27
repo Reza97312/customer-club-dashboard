@@ -11,12 +11,50 @@ import bronzeTrophyImg from "@/src/assets/image/bronzeCup.png";
 import silverTrophyImg from "@/src/assets/image/silverCup.png";
 import goldTrophyImg from "@/src/assets/image/goldCup.png";
 import diamondImg from "@/src/assets/image/diamond.png";
+import { useMemo } from "react";
+import { LevelItem } from "../types/Levels.type";
 
 const DEFAULT_LEVELS = [
-  { id: 1, name: "سطح برنزی", scores: "100" },
-  { id: 2, name: " سطح نقره‌ای", scores: "200" },
-  { id: 3, name: "سطح طلایی", scores: "300" },
-  { id: 4, name: "  سطح الماس ", scores: "400" },
+  {
+    id: 1,
+    name: "سطح برنزی",
+    scores: "100",
+    status: true,
+    createdAt: "",
+    updatedAt: "",
+    deletedAt: null,
+    file: null,
+  },
+  {
+    id: 2,
+    name: "سطح نقره‌ای",
+    scores: "200",
+    status: true,
+    createdAt: "",
+    updatedAt: "",
+    deletedAt: null,
+    file: null,
+  },
+  {
+    id: 3,
+    name: "سطح طلایی",
+    scores: "300",
+    status: true,
+    createdAt: "",
+    updatedAt: "",
+    deletedAt: null,
+    file: null,
+  },
+  {
+    id: 4,
+    name: "سطح الماس",
+    scores: "400",
+    status: true,
+    createdAt: "",
+    updatedAt: "",
+    deletedAt: null,
+    file: null,
+  },
 ];
 
 export default function Levels() {
@@ -35,18 +73,32 @@ export default function Levels() {
     (a, b) => Number(a.scores) - Number(b.scores),
   );
 
-  const allLevels = [
-    { id: 0, name: "کاربر عادی", scores: "0" },
-    ...sortedLevels,
-  ];
+  const allLevels: LevelItem[] = useMemo(
+    () => [
+      {
+        id: 0,
+        name: "کاربر عادی",
+        scores: "0",
+        status: true,
+        createdAt: "",
+        updatedAt: "",
+        deletedAt: null,
+        file: null,
+      },
+      ...sortedLevels,
+    ],
+    [sortedLevels],
+  );
 
-  const getLevelStaticImage = (name: string): StaticImageData => {
+  const getLevelFallbackImage = (name: string): StaticImageData => {
     const cleanName = name ? name.trim() : "";
+
     if (cleanName.includes("عادی")) return flagImg;
     if (cleanName.includes("برنز")) return bronzeTrophyImg;
     if (cleanName.includes("نقره")) return silverTrophyImg;
     if (cleanName.includes("طلا")) return goldTrophyImg;
     if (cleanName.includes("الماس")) return diamondImg;
+
     return flagImg;
   };
 
@@ -58,11 +110,34 @@ export default function Levels() {
     }
   }
 
+  const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
+
+  const levelsWithImages = useMemo(() => {
+    const result = allLevels.map((level) => {
+      const hasFileLink = Boolean(level.file?.link);
+
+      const cleanBaseUrl = imageBaseUrl?.replace(/\/$/, "") || "";
+      const cleanLink = level.file?.link?.replace(/^\//, "") || "";
+
+      const image =
+        hasFileLink && cleanBaseUrl
+          ? `${cleanBaseUrl}/${cleanLink}`
+          : getLevelFallbackImage(level.name);
+
+      return {
+        ...level,
+        image,
+      };
+    });
+
+    return result;
+  }, [allLevels, imageBaseUrl]);
+
   let startIndex = Math.max(0, currentLevelIndex - 1);
   if (startIndex + 2 >= allLevels.length) {
     startIndex = Math.max(0, allLevels.length - 3);
   }
-  const visibleLevels = allLevels.slice(startIndex, startIndex + 3);
+  const visibleLevels = levelsWithImages.slice(startIndex, startIndex + 3);
 
   const nextLevelObj = allLevels[currentLevelIndex + 1] || null;
   const neededScore = nextLevelObj
@@ -90,8 +165,9 @@ export default function Levels() {
 
   if (isUserLoading || isLevelsLoading) {
     return (
-      <div className="w-full h-[392px] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+      <div className="w-full h-[392px] flex flex-col gap-5 items-center justify-center">
+        <Loader2 className="w-14 h-14 animate-spin text-[#7C49F2] " />
+        <p className="font-semibold text-[18px]">لطفا منتظر بمانید...</p>
       </div>
     );
   }
@@ -119,7 +195,7 @@ export default function Levels() {
                 (idx === visibleLevels.length - 1 ||
                   userScore < Number(visibleLevels[idx + 1]?.scores));
 
-              const imgSource = getLevelStaticImage(lvl.name);
+              const imgSource = lvl.image;
 
               return (
                 <div
