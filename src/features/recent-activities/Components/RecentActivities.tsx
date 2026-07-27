@@ -13,6 +13,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/src/shared/components/ui/button";
 import { Badge } from "@/src/shared/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/shared/components/ui/select";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import {
   ChartConfig,
@@ -32,20 +39,20 @@ const filterTabs: {
   label: string;
   value?: RecentActivitiesTypeEnum;
 }[] = [
-  { id: "all", label: "نمایش همه", value: undefined },
-  { id: "score", label: "امتیاز", value: RecentActivitiesTypeEnum.SCORE },
-  { id: "coin", label: "سکه", value: RecentActivitiesTypeEnum.COIN },
-  { id: "both", label: "دوگانه", value: RecentActivitiesTypeEnum.BOTH },
-  {
-    id: "spent",
-    label: "برداشت سکه",
-    value: RecentActivitiesTypeEnum.SPENTCOIN,
-  },
   {
     id: "transfer",
     label: "انتقال سکه",
     value: RecentActivitiesTypeEnum.TRANSFERCOIN,
   },
+  {
+    id: "spent",
+    label: "برداشت سکه",
+    value: RecentActivitiesTypeEnum.SPENTCOIN,
+  },
+  { id: "both", label: "دوگانه", value: RecentActivitiesTypeEnum.BOTH },
+  { id: "coin", label: "سکه", value: RecentActivitiesTypeEnum.COIN },
+  { id: "score", label: "امتیاز", value: RecentActivitiesTypeEnum.SCORE },
+  { id: "all", label: "نمایش همه", value: undefined },
 ];
 
 const chartData = [
@@ -191,21 +198,46 @@ export default function RecentActivities({
             </div>
           </div>
 
-          <nav className="flex items-center justify-end gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {filterTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                className={`cursor-pointer whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeTabId === tab.id
-                    ? "border-2 border-gray-800 text-gray-800 bg-white shadow-sm"
-                    : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-                }`}
+          <>
+            <nav className="hidden md:flex items-center justify-end gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {filterTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`cursor-pointer whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                    activeTabId === tab.id
+                      ? "border-2 border-gray-800 text-gray-800 bg-white shadow-sm"
+                      : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+
+            <div className="md:hidden pb-2">
+              <Select
+                value={String(activeTabId)}
+                onValueChange={(value) => handleTabChange(value)}
               >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
+                <SelectTrigger className="w-full rounded-full border border-gray-200 bg-white px-4 py-5 text-xs font-bold text-gray-800 shadow-sm">
+                  <SelectValue placeholder="انتخاب تب" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {filterTabs.map((tab) => (
+                    <SelectItem
+                      key={tab.id}
+                      value={String(tab.id)}
+                      className="text-xs font-medium"
+                    >
+                      {tab.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
         </header>
 
         <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">

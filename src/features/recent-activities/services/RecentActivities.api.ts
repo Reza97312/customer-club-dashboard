@@ -14,7 +14,7 @@ export const getRecentActivitiesApi = async (
 ): Promise<RecentActivitiesResponse> => {
   const accessToken = useAuthStore.getState().accessToken;
 
-  const queryParams: Record<string, any> = {
+  const queryParams: RecentActivitiesParams = {
     offset: params.offset ?? 0,
     size: params.size ?? 10,
   };

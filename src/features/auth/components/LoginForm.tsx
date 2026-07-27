@@ -112,7 +112,7 @@ export function LoginForm() {
             <Button
               type="submit"
               disabled={isPending}
-              className=" cursor-pointer w-full rounded-xl bg-[#7C49F2]  py-6 text-md shadow-md transition-all"
+              className=" cursor-pointer w-full rounded-xl bg-[#7C49F2] hover:bg-[#7C49F2]  py-6 text-md shadow-md transition-all"
             >
               {isPending ? (
                 <>
