@@ -4,6 +4,18 @@ export interface UserCity {
   locationType: string;
 }
 
+export interface UserFile {
+  id: number;
+  key: string;
+  mimeType: string;
+  size: string;
+  link: string;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
 export interface UserLevelFile {
   id: number;
   key: string;
@@ -60,6 +72,7 @@ export interface UserProfile {
   userType: string;
   defaultRole: string;
   trustLevel: string[];
+  file: UserFile | null;
 }
 
 export interface UserProfileApiResponse {

@@ -21,13 +21,13 @@ export const useCustomerClubData = (activeTab: string | number) => {
   const { data: vitrinDetail } = useQuery({
     queryKey: ["vitrin-detail", activeTab],
     queryFn: () => getVitrinDetails(activeTab as number),
-    enabled: typeof activeTab === "number",
+    enabled: typeof activeTab === "number" && !Number.isNaN(activeTab),
   });
 
   const { data: vitrinSummary } = useQuery({
     queryKey: ["vitrin-summary", activeTab],
     queryFn: () => getVitrinSummary(activeTab as number),
-    enabled: typeof activeTab === "number",
+    enabled: typeof activeTab === "number" && !Number.isNaN(activeTab),
   });
 
   return { vitrins, personalSummary, vitrinDetail, vitrinSummary };
