@@ -23,19 +23,20 @@ export const getRecentActivitiesApi = async (
     queryParams.type = params.type;
   }
 
+  let endpoint = "recent-activities";
+
   if (params.userVitrinId) {
-    queryParams.userVitrinId = params.userVitrinId;
+    endpoint = `recent-activities/${params.userVitrinId}`;
+
+    delete queryParams.userVitrinId;
   }
 
-  const response = await apiClient.get<RecentActivitiesResponse>(
-    "recent-activities",
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: queryParams,
+  const response = await apiClient.get<RecentActivitiesResponse>(endpoint, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-  );
+    params: queryParams,
+  });
 
   return response.data;
 };

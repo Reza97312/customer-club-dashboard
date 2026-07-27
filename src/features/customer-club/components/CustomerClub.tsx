@@ -37,6 +37,13 @@ export default function CustomerClub() {
 
   const isPersonal = activeTab === "personal";
 
+  const currentMonthlyCoins = isPersonal
+    ? personalSummary?.totalCoinMonthly
+    : null;
+  const currentMonthlyScores = isPersonal
+    ? personalSummary?.totalScoreMonthly
+    : vitrinSummary?.totalScoreMonthly;
+
   const currentLocation = isPersonal
     ? `${userProfile?.city?.name ?? ""}، ${userProfile?.country?.name ?? ""}`
     : `${vitrinDetail?.user?.city?.name ?? ""}، ${vitrinDetail?.user?.country?.name ?? ""}`;
@@ -149,15 +156,28 @@ export default function CustomerClub() {
                 )}
               </p>
 
-              {isPersonal && (
+              {isPersonal ? (
                 <div>
                   <Badge
                     variant="secondary"
                     className="bg-[#ECF0F2] text-gray-500 text-[12px] font-normal px-2 py-0.5 rounded-md"
                   >
-                    مغازه‌دار
+                    {userProfile?.defaultRole === "retailer"
+                      ? "خرده فروش"
+                      : "کاربر عادی"}
                   </Badge>
                 </div>
+              ) : (
+                vitrinDetail?.typeGuild && (
+                  <div>
+                    <Badge
+                      variant="secondary"
+                      className="bg-[#ECF0F2] text-gray-500 text-[12px] font-normal px-2 py-0.5 rounded-md uppercase"
+                    >
+                      {vitrinDetail.typeGuild}
+                    </Badge>
+                  </div>
+                )
               )}
 
               <p className="text-xs text-gray-500 flex items-center gap-1 pt-1">
@@ -258,28 +278,35 @@ export default function CustomerClub() {
                   <span className="text-[12px]">۳۰ روز اخیر</span>
                   <ChevronLeft className="w-3 h-3 text-gray-400" />
                 </Badge>
-                <div className="flex items-center gap-1 mr-1">
-                  <Image
-                    src={ticketImg}
-                    alt="آیکون تیکت"
-                    width={32}
-                    height={32}
-                  />
-                  <span className="text-[#667880] text-[10px]">
-                    سکه دریافتی از طرح تخفیف سکه‌ای:
-                  </span>
-                  <strong className="text-[#667880] text-[14px]">
-                    ۵۴۱ <span className="text-[10px]">سکه</span>{" "}
-                  </strong>
-                </div>
+
+                {currentMonthlyCoins !== null &&
+                  currentMonthlyCoins !== undefined && (
+                    <div className="flex items-center gap-1 mr-1">
+                      <Image
+                        src={ticketImg}
+                        alt="آیکون تیکت"
+                        width={32}
+                        height={32}
+                      />
+                      <span className="text-[#667880] text-[10px]">
+                        سکه دریافتی از طرح تخفیف سکه‌ای:
+                      </span>
+                      <strong className="text-[#667880] text-[14px]">
+                        {currentMonthlyCoins}{" "}
+                        <span className="text-[10px]">سکه</span>{" "}
+                      </strong>
+                    </div>
+                  )}
               </div>
 
               <div className="flex items-center gap-1 shrink-0">
                 <Image src={trophyImg} alt="آیکون جام" width={32} height={32} />
 
                 <span className="text-[#667880] text-[10px]">معادل:</span>
+
                 <strong className="text-[#15181A] font-bold text-[14px]">
-                  ۵۶ <span className="!text-[10px]">امتیاز</span>
+                  {currentMonthlyScores || 0}{" "}
+                  <span className="!text-[10px]">امتیاز</span>
                 </strong>
               </div>
             </div>
