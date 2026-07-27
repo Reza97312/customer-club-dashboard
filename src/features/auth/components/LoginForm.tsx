@@ -3,13 +3,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Phone, Lock, Loader2, House, Eye, EyeOff } from "lucide-react";
+import { Phone, Lock, Loader2, Eye, EyeOff } from "lucide-react";
 import { loginSchema, LoginFormValues } from "../schemas/login.schema";
 import { useLogin } from "../hooks/useLogin";
 import { Button } from "@/src/shared/components/ui/button";
 import { Input } from "@/src/shared/components/ui/input";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useState } from "react";
 
 export function LoginForm() {
@@ -32,7 +31,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#e3ebfc] to-[#e7e4f7] p-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,9 +39,6 @@ export function LoginForm() {
         className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl"
       >
         <div className="mb-8 text-center">
-          <Link href="/">
-            <House className="text-violet-600 cursor-pointer hover:text-violet-700 relative top-8 right-0" />
-          </Link>
           <h2 className="text-2xl font-bold text-gray-800">
             ورود به حساب کاربری
           </h2>
@@ -58,7 +54,7 @@ export function LoginForm() {
             transition={{ delay: 0.1 }}
           >
             <div className="relative">
-              <Phone className="absolute right-3 top-3 h-5 w-5 text-violet-600" />
+              <Phone className="absolute right-3 top-3 h-5 w-5 text-[#7C49F2]" />
               <Input
                 type="text"
                 placeholder="شماره موبایل"
@@ -79,7 +75,7 @@ export function LoginForm() {
             transition={{ delay: 0.2 }}
           >
             <div className="relative">
-              <Lock className="absolute right-3 top-3 h-5 w-5 text-violet-600" />
+              <Lock className="absolute right-3 top-3 h-5 w-5 text-[#7C49F2]" />
 
               <Input
                 type={showPassword ? "text" : "password"}
@@ -91,7 +87,7 @@ export function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute left-3 top-3 text-violet-600"
+                className="absolute left-3 top-3 text-[#7C49F2]"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5 cursor-pointer" />
@@ -116,7 +112,7 @@ export function LoginForm() {
             <Button
               type="submit"
               disabled={isPending}
-              className=" cursor-pointer w-full rounded-xl bg-purple-600 hover:bg-purple-700 py-6 text-md shadow-md transition-all"
+              className=" cursor-pointer w-full rounded-xl bg-[#7C49F2]  py-6 text-md shadow-md transition-all"
             >
               {isPending ? (
                 <>

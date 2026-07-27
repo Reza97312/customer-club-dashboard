@@ -70,7 +70,6 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body className={estedad.className}>
         <QueryProvider>{children}</QueryProvider>
-
         <Toaster position="top-center" richColors />
       </body>
     </html>
